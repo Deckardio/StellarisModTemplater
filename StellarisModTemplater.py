@@ -3,7 +3,7 @@ from os import listdir, mkdir, path
 import argparse
 from rich.progress import track
 from rich import print
-
+import sys
 
 def main(mod_name, folder):
     create_folder(mod_name)
@@ -100,16 +100,19 @@ if __name__ == '__main__':
     folder = args.folder
     if path.isdir(folder) == False:
         print(f'[red]{folder} is not a valid folder')
-        exit()
+        sys.exit()
     elif listdir(folder) == []:
         print(f'[red]{folder} is empty')
-        exit()
+        sys.exit()
     elif mod_name == '':
         print(f'[red]{mod_name} is empty')
-        exit()
+        sys.exit()
     elif path.isfile('./race_name') == False:
         print(f'[red]race_name is not exist')
-        exit()
+        sys.exit()
+    elif folder == mod_name:
+        print(f'[red]folder names and mod name must not match')
+        sys.exit()
     else:
         try:
             main(mod_name, folder)
