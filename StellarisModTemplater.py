@@ -104,6 +104,9 @@ if __name__ == '__main__':
     elif listdir(folder) == []:
         print(f'[red]{folder} is empty')
         exit()
+    elif mod_name == '':
+        print(f'[red]{mod_name} is empty')
+        exit()
     elif path.isfile('./race_name') == False:
         print(f'[red]race_name is not exist')
         exit()

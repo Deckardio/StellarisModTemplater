@@ -6,3 +6,4 @@ config_creater.py
 build
 dist
 StellarisModTemplater.spec
+.gitignore
