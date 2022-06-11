@@ -1,6 +1,8 @@
 from PIL import Image
 from os import listdir, mkdir, path
-import re
+import argparse
+from rich.progress import track
+from rich import print
 
 def scale_img(img, newheight):
     width, height = img.size
@@ -71,18 +73,24 @@ def read_folder(folder, mod_name):
     return files
 
 if __name__ == '__main__':
-    mod_name = 'xyz'
+    cli = argparse.ArgumentParser()
+    cli.add_argument('-m', '--mod_name', help='Name of the mod', required=True)
+    cli.add_argument('-f', '--folder', help='Folder containing the portraits', required=True)
+    args = cli.parse_args()
+    mod_name = args.mod_name
+    folder = args.folder
     create_folder(mod_name)
     iter = 0
-    for entry in listdir('.'):
+    for entry in track(listdir(f'{folder}/'),description=f'[green]Processing ...', total=len(listdir(f'{folder}/'))):
             if entry.endswith('.dds'):
                 try:
-                    image = remove_transparency(Image.open(entry))
+                    image = remove_transparency(Image.open(f'{folder}/{entry}'))
                     new_img = scale_img(image, 380)
                     new_img.save(f'{mod_name}/gfx/models/portraits/{mod_name}{iter}.dds')
                     iter += 1
                 except:
-                    print(f'{entry} is not a valid image')
+                    print(f'[red]{entry} is not a valid image')
     folder = f'{mod_name}/gfx/models/portraits/'
     create_species(mod_name, read_folder(folder, mod_name))
     config_class(mod_name)
+    print(f'[green]Mod {mod_name} created')
