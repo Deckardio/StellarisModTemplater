@@ -4,6 +4,25 @@ import argparse
 from rich.progress import track
 from rich import print
 
+
+def main(mod_name, folder):
+    create_folder(mod_name)
+    iter = 0
+    for entry in track(listdir(f'{folder}/'),description=f'[green]Processing ...', total=len(listdir(f'{folder}/'))):
+            if entry.endswith('.dds'):
+                try:
+                    image = remove_transparency(Image.open(f'{folder}/{entry}'))
+                    new_img = scale_img(image, 380)
+                    new_img.save(f'{mod_name}/gfx/models/portraits/{mod_name}{iter}.dds')
+                    iter += 1
+                except:
+                    print(f'[red]{entry} is not a valid image')
+    folder = f'{mod_name}/gfx/models/portraits/'
+    create_species(mod_name, read_folder(folder, mod_name))
+    config_class(mod_name)
+    print(f'[green]Mod [blue]{mod_name} [green]created')
+
+
 def scale_img(img, newheight):
     width, height = img.size
     scale = newheight / height
@@ -79,18 +98,17 @@ if __name__ == '__main__':
     args = cli.parse_args()
     mod_name = args.mod_name
     folder = args.folder
-    create_folder(mod_name)
-    iter = 0
-    for entry in track(listdir(f'{folder}/'),description=f'[green]Processing ...', total=len(listdir(f'{folder}/'))):
-            if entry.endswith('.dds'):
-                try:
-                    image = remove_transparency(Image.open(f'{folder}/{entry}'))
-                    new_img = scale_img(image, 380)
-                    new_img.save(f'{mod_name}/gfx/models/portraits/{mod_name}{iter}.dds')
-                    iter += 1
-                except:
-                    print(f'[red]{entry} is not a valid image')
-    folder = f'{mod_name}/gfx/models/portraits/'
-    create_species(mod_name, read_folder(folder, mod_name))
-    config_class(mod_name)
-    print(f'[green]Mod {mod_name} created')
+    if path.isdir(folder) == False:
+        print(f'[red]{folder} is not a valid folder')
+        exit()
+    elif listdir(folder) == []:
+        print(f'[red]{folder} is empty')
+        exit()
+    elif path.isfile('./race_name') == False:
+        print(f'[red]race_name is not exist')
+        exit()
+    else:
+        try:
+            main(mod_name, folder)
+        except:
+            print('[red]Something went wrong or ')
