@@ -114,4 +114,4 @@ if __name__ == '__main__':
         try:
             main(mod_name, folder)
         except:
-            print('[red]Something went wrong or ')
+            print('[red]Something went wrong, create issue on github https://github.com/Deckardio/StellarisModTemplater')
