@@ -89,16 +89,24 @@ def config_class(mod_name):
 
 
 def delete_image(image_name, mod_name):
-    pattern = re.compile(re.escape(image_name))
-    with open(f'out/{mod_name}/gfx/portraits/portraits/{mod_name}_species_{mod_name}.txt', 'w') as f:
-        file = f.readlines()
-        for line in file:
-            if line == 'portrait_groups':
-                break
-            else:
-                result = pattern.search(line)
-                if result is None:
+    flag = True
+    tmp = open(f'out/{mod_name}/gfx/portraits/portraits/{mod_name}_species_{mod_name}.txt')
+    lines = tmp.readlines()
+    tmp.close()
+    pattern_1 = re.compile(re.escape(image_name))
+    pattern_2 = re.compile(re.escape('portrait_groups'))
+    with open(f'out/{mod_name}/gfx/portraits/portraits/{mod_name}_species_{mod_name}.txt', 'w', encoding='utf-8') as f:
+        for line in lines:
+            if flag:
+                result1 = pattern_1.search(line)
+                result2 = pattern_2.search(line)
+                if result1 is None:
                     f.write(line)
+                if result2 is not None:
+                    flag = False
+            else:
+                f.write(line.replace(image_name,''))
+        
     for entry in listdir(f'out/{mod_name}/gfx/models/portraits/'):
         if entry.endswith('.dds'):
             if entry == image_name:
