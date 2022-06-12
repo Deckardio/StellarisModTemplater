@@ -9,3 +9,4 @@ StellarisModTemplater.spec
 .gitignore
 TODO
 out
+test.py
