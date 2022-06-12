@@ -37,15 +37,18 @@ def remove_transparency(im):
 
 
 def create_folder(mod_name):
-    if mod_name not in listdir('.'):
-        mkdir(mod_name)
-        mkdir(f'{mod_name}/gfx')
-        mkdir(f'{mod_name}/common')
-        mkdir(f'{mod_name}/common/species_classes')
-        mkdir(f'{mod_name}/gfx/models')
-        mkdir(f'{mod_name}/gfx/portraits')
-        mkdir(f'{mod_name}/gfx/models/portraits')
-        mkdir(f'{mod_name}/gfx/portraits/portraits')
+    if mod_name not in listdir('out'):
+        mkdir(f'out/{mod_name}')
+        mkdir(f'out/{mod_name}/gfx')
+        mkdir(f'out/{mod_name}/common')
+        mkdir(f'out/{mod_name}/common/species_classes')
+        mkdir(f'out/{mod_name}/gfx/models')
+        mkdir(f'out/{mod_name}/gfx/portraits')
+        mkdir(f'out/{mod_name}/gfx/models/portraits')
+        mkdir(f'out/{mod_name}/gfx/portraits/portraits')
+    else:
+        print(f'[red]{mod_name} already exists, please choose another name')
+        sys.exit()
 
 
 def create_species(mod_name, files):
