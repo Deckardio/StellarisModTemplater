@@ -113,9 +113,6 @@ if __name__ == '__main__':
     elif path.isfile('./race_name') == False:
         print(f'[red]race_name is not exist')
         sys.exit()
-    elif folder == mod_name:
-        print(f'[red]folder names and mod name must not match')
-        sys.exit()
     else:
         try:
             main(mod_name, folder)
