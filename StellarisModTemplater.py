@@ -1,9 +1,10 @@
 from PIL import Image
-from os import listdir, mkdir, path
+from os import listdir, mkdir, path, remove
 import argparse
 from rich.progress import track
 from rich import print
 import sys
+import re
 
 def main(mod_name, folder):
     create_folder(mod_name)
@@ -13,11 +14,11 @@ def main(mod_name, folder):
                 try:
                     image = remove_transparency(Image.open(f'{folder}/{entry}'))
                     new_img = scale_img(image, 380)
-                    new_img.save(f'{mod_name}/gfx/models/portraits/{mod_name}{iter}.dds')
+                    new_img.save(f'out/{mod_name}/gfx/models/portraits/{mod_name}{iter}.dds')
                     iter += 1
                 except:
                     print(f'[red]{entry} is not a valid image')
-    folder = f'{mod_name}/gfx/models/portraits/'
+    folder = f'out/{mod_name}/gfx/models/portraits/'
     create_species(mod_name, read_folder(folder, mod_name))
     config_class(mod_name)
     print(f'[green]Mod [blue]{mod_name} [green]created')
@@ -37,7 +38,9 @@ def remove_transparency(im):
 
 
 def create_folder(mod_name):
-    if mod_name not in listdir('out'):
+    if 'out' not in listdir():
+        mkdir('out')
+    if mod_name not in listdir('out/'):
         mkdir(f'out/{mod_name}')
         mkdir(f'out/{mod_name}/gfx')
         mkdir(f'out/{mod_name}/common')
@@ -52,7 +55,7 @@ def create_folder(mod_name):
 
 
 def create_species(mod_name, files):
-    with open(f'{mod_name}/gfx/portraits/portraits/{mod_name}_species_{mod_name}.txt', 'w') as f:
+    with open(f'out/{mod_name}/gfx/portraits/portraits/{mod_name}_species_{mod_name}.txt', 'w') as f:
         f.write('portraits = {\n')
         for line in files:
             f.write('\t%s = { texturefile = "gfx/models/portraits/%s.dds"   }\n' % (line, line))
@@ -81,10 +84,27 @@ def config_class(mod_name):
     with open('race_name', 'r', encoding='utf-8') as f:
         file =  f.read()
     race_name = file.replace('OUR_SPECIE_NAME',mod_name)
-    with open(f'{mod_name}/common/species_classes/00{mod_name}classes.txt', 'w') as f:
+    with open(f'out/{mod_name}/common/species_classes/00{mod_name}classes.txt', 'w') as f:
         f.write(race_name)
 
 
+def delete_image(image_name, mod_name):
+    pattern = re.compile(re.escape(image_name))
+    with open(f'out/{mod_name}/gfx/portraits/portraits/{mod_name}_species_{mod_name}.txt', 'w') as f:
+        file = f.readlines()
+        for line in file:
+            if line == 'portrait_groups':
+                break
+            else:
+                result = pattern.search(line)
+                if result is None:
+                    f.write(line)
+    for entry in listdir(f'out/{mod_name}/gfx/models/portraits/'):
+        if entry.endswith('.dds'):
+            if entry == image_name:
+                remove(f'out/{mod_name}/gfx/models/portraits/{entry}')
+                
+            
 
 
 def read_folder(folder, mod_name):
@@ -114,7 +134,7 @@ if __name__ == '__main__':
         print(f'[red]race_name is not exist')
         sys.exit()
     else:
-        try:
-            main(mod_name, folder)
-        except:
-            print('[red]Something went wrong, create issue on github https://github.com/Deckardio/StellarisModTemplater')
+        #try:
+        main(mod_name, folder)
+        #except:
+            #print('[red]Something went wrong, create issue on github https://github.com/Deckardio/StellarisModTemplater')

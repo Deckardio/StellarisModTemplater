@@ -7,3 +7,5 @@ build
 dist
 StellarisModTemplater.spec
 .gitignore
+TODO
+out
