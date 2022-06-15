@@ -8,6 +8,7 @@ import re
 
 def main(mod_name, folder):
     create_folder(mod_name)
+    old_name = open(f'out/{mod_name}.txt', 'w', encoding='utf-8')
     iter = 0
     for entry in track(listdir(f'{folder}/'),description=f'[green]Processing ...', total=len(listdir(f'{folder}/'))):
             if entry.endswith('.dds'):
@@ -15,6 +16,7 @@ def main(mod_name, folder):
                     image = remove_transparency(Image.open(f'{folder}/{entry}'))
                     new_img = scale_img(image, 380)
                     new_img.save(f'out/{mod_name}/gfx/models/portraits/{mod_name}{iter}.dds')
+                    old_name.write(f'{entry}: {mod_name}{iter}.dds\n')
                     iter += 1
                 except:
                     print(f'[red]{entry} is not a valid image')
@@ -22,7 +24,12 @@ def main(mod_name, folder):
     create_species(mod_name, read_folder(folder, mod_name))
     config_class(mod_name)
     print(f'[green]Mod [blue]{mod_name} [green]created')
+    old_name.close()
 
+
+def save_old_name(mod_name, entry, iter):
+    with open(f'{mod_name}.txt', 'w+', encoding='utf-8') as f:
+        f.write(f'{entry}: {mod_name}{iter}.dds\n')
 
 def scale_img(img, newheight):
     width, height = img.size
