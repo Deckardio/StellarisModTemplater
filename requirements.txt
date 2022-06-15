@@ -1,0 +1,6 @@
+PIL
+os
+argparse
+rich
+sys
+re
