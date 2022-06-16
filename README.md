@@ -18,4 +18,4 @@ usage: StellarisModTemplater.py -m MOD_NAME -f FOLDER
 
 exemple: StellarisModTemplater.py -m "My mod name" -f "Images folder"
 ```
-For work with the module, you need to specify the name of the mod and the folder with images. Also you need to have the species_classes file (called `race_name`) in the same folder as main script. Thats need for create class file in `ModName`\common\species_classes\00`ModName`classes.txt. Script replace `OUR_SPECIE_NAME` in race_name file to you mod name.
+For work with the module, you need to specify the name of the mod and the folder with .dds format images. Also you need to have the species_classes file (called `race_name`) in the same folder as main script. Thats need for create class file in `ModName`\common\species_classes\00`ModName`classes.txt. Script replace `OUR_SPECIE_NAME` in race_name file to you mod name.
